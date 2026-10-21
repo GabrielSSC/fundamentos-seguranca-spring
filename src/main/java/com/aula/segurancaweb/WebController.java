@@ -3,6 +3,7 @@ package com.aula.segurancaweb;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class WebController {
 
     private final List<String> comentarios = new ArrayList<>();
     private double saldo = 1000.00;
+    private static final int TAMANHO_MAXIMO_COMENTARIO = 200;
 
     @GetMapping("/")
     public String index() {
@@ -27,7 +29,16 @@ public class WebController {
 
     @PostMapping("/comentario")
     public String comentario(@RequestParam("texto") String texto, Model model) {
-        comentarios.add(texto);
+        if (texto != null && !texto.trim().isEmpty()) {
+            // 3. Validação de tamanho máximo
+            if (texto.length() > TAMANHO_MAXIMO_COMENTARIO) {
+                texto = texto.substring(0, TAMANHO_MAXIMO_COMENTARIO);
+            }
+            // 1. Sanitização com HtmlUtils.htmlEscape()
+            String textoSanitizado = HtmlUtils.htmlEscape(texto.trim());
+            
+            comentarios.add(textoSanitizado);
+        }
         return "redirect:/dashboard";
     }
 

@@ -1,17 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .saldo { font-size: 24px; color: #28a745; }
-        .comentario { border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 4px; }
-        .form-group { margin: 10px 0; }
-        input, button { padding: 10px; }
-        .danger { background: #dc3545; color: white; border: none; cursor: pointer; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .saldo {
+            font-size: 24px;
+            color: #28a745;
+        }
+
+        .comentario {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+
+        .form-group {
+            margin: 10px 0;
+        }
+
+        input,
+        button {
+            padding: 10px;
+        }
+
+        .danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
     <h1>Dashboard</h1>
     <p class="saldo">Saldo: R$ <span th:text="${saldo}">1000.00</span></p>
@@ -20,12 +50,12 @@
     <!-- EXERCÍCIO 1: Este formulário não possui token CSRF -->
     <!-- TAREFA: Após adicionar Spring Security, inclua o token CSRF aqui -->
     <form action="/transferir" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="form-group">
-            <input type="text" name="destino" placeholder="Conta destino" required/>
+            <input type="text" name="destino" placeholder="Conta destino" required />
         </div>
         <div class="form-group">
-            <input type="number" name="valor" placeholder="Valor" step="0.01" required/>
+            <input type="number" name="valor" placeholder="Valor" step="0.01" required />
         </div>
         <button type="submit" class="danger">Transferir</button>
     </form>
@@ -33,18 +63,19 @@
     <h2>Comentários (XSS)</h2>
     <!-- EXERCÍCIO 2: th:utext renderiza HTML sem escaping -->
     <div th:each="c : ${comentarios}" class="comentario">
-        <div th:utext="${c}">Comentário</div>
+        <div th:text="${c}">Comentário</div>
     </div>
 
     <form action="/comentario" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="form-group">
-            <input type="text" name="texto" placeholder="Seu comentário..." required/>
+            <input type="text" name="texto" placeholder="Seu comentário..." maxlength="200" required />
         </div>
         <button type="submit">Comentar</button>
     </form>
 
-    <hr/>
+    <hr />
     <a href="/">← Voltar</a>
 </body>
+
 </html>
