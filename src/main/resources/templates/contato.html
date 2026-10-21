@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Pesquisa</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-        input { width: 70%; padding: 10px; }
-        button { padding: 10px 20px; }
-        .result { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        input {
+            width: 70%;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
     </style>
 </head>
+
 <body>
     <h1>Pesquisa (DoS)</h1>
     <p>Esta pesquisa usa regex vulnerável a ReDoS.</p>
     <form action="/pesquisar" method="get">
-        <input type="text" name="q" placeholder="Digite algo..." required/>
+        <input type="text" name="q" placeholder="Digite algo..." maxlength="100" required />
         <button type="submit">Pesquisar</button>
     </form>
-    <p><small>Dica: Tente input com muitos 'a' seguidos de '!' como: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa! </small></p>
+    <p><small>Dica: Tente input com muitos 'a' seguidos de '!' como:
+            aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!
+        </small></p>
     <a href="/">← Voltar</a>
 </body>
+
 </html>

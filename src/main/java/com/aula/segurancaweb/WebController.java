@@ -7,6 +7,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Controller
 public class WebController {
@@ -14,6 +15,8 @@ public class WebController {
     private final List<String> comentarios = new ArrayList<>();
     private double saldo = 1000.00;
     private static final int TAMANHO_MAXIMO_COMENTARIO = 200;
+    private static final Pattern PADRAO_PESQUISA = Pattern.compile("^a+$");
+    private static final int TAMANHO_MAXIMO_PESQUISA = 100;
 
     @GetMapping("/")
     public String index() {
@@ -32,11 +35,11 @@ public class WebController {
         if (texto != null && !texto.trim().isEmpty()) {
             // 3. Validação de tamanho máximo
             if (texto.length() > TAMANHO_MAXIMO_COMENTARIO) {
-                texto = texto.substring(0, TAMANHO_MAXIMO_COMENTARIO);
+                texto = texto.substring(0, TAMANHO_MAXIMO_COMENTARIO); // Ou pode retornar erro se preferir
             }
             // 1. Sanitização com HtmlUtils.htmlEscape()
             String textoSanitizado = HtmlUtils.htmlEscape(texto.trim());
-            
+
             comentarios.add(textoSanitizado);
         }
         return "redirect:/dashboard";
@@ -45,7 +48,7 @@ public class WebController {
     @PostMapping("/transferir")
     @ResponseBody
     public String transferir(@RequestParam("destino") String destino,
-                             @RequestParam("valor") double valor) {
+            @RequestParam("valor") double valor) {
         if (valor > 0 && valor <= saldo) {
             saldo -= valor;
             return "Transferido " + valor + " para " + destino + ". Saldo: " + saldo;
@@ -56,10 +59,18 @@ public class WebController {
     @GetMapping("/pesquisar")
     @ResponseBody
     public String pesquisar(@RequestParam("q") String query) {
-        if (query.matches("(a|aa)+b")) {
+        if (query == null || query.isBlank()) {
+            return "Por favor, digite algo para pesquisar.";
+        }
+        // 3. Validação de tamanho máximo defensiva
+        if (query.length() > TAMANHO_MAXIMO_PESQUISA) {
+            return "Termo de pesquisa muito longo (máximo de 100 caracteres permitido).";
+        }
+        // 1 e 2. Validação usando o Pattern pré-compilado e linear
+        if (PADRAO_PESQUISA.matcher(query).matches()) {
             return "Resultado: padrão A encontrado";
         }
-        return "Nenhum resultado para: " + query;
+        return "Nenhum resultado para: " + HtmlUtils.htmlEscape(query);
     }
 
     @GetMapping("/contato")
