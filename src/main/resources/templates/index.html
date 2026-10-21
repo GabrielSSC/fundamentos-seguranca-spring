@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Aula Segurança Web</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; }
+        .card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .vuln { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Aula: Segurança Web</h1>
+    <p>Bem-vindo à aplicação de demonstração de vulnerabilidades.</p>
+
+    <div class="card">
+        <h2>Exercício 1 - CSRF</h2>
+        <p class="vuln">Status: VULNERÁVEL</p>
+        <p>A transferência de valores não possui proteção CSRF.</p>
+        <a href="/dashboard">Ir para Dashboard</a>
+    </div>
+
+    <div class="card">
+        <h2>Exercício 2 - XSS</h2>
+        <p class="vuln">Status: VULNERÁVEL</p>
+        <p>Comentários são renderizados sem escaping no HTML.</p>
+        <a href="/dashboard">Ir para Dashboard</a>
+    </div>
+
+    <div class="card">
+        <h2>Exercício 3 - DoS</h2>
+        <p class="vuln">Status: VULNERÁVEL</p>
+        <p>A pesquisa usa regex ineficiente sem limites de input.</p>
+        <a href="/contato">Testar Pesquisa</a>
+    </div>
+</body>
+</html>

